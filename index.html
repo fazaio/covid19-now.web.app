@@ -5,77 +5,43 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
   	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" href="assets/css/fazaio.css">
+	<link rel="stylesheet" href="assets/css/style.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.4/vue.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.3/axios.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 	<script src="https://superal.github.io/canvas2image/canvas2image.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
 	<title>Coronavirus disease (COVID-19)</title>
-	<style>
-		.isi{
-			padding: 10px 0px 10px 0px;
-			margin-top: 15px;
-		}
-		.shared{
-			position: fixed;
-			bottom: 20px;
-			right: 20px;
-		}
-		.capture-button{
-			width: 50px;
-			height: 50px;
-			background-color: #fff;
-			border:1px solid #555;
-			color: #555;
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			text-align: center;
-			box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  			transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-  			cursor: pointer;
-  			z-index: 1;
-		}
-		.capture-button:focus,.capture-button:hover{
-			color: #dc3545;
-  			border-color: #555;
-  			outline: 0;
-		}
-		.container{
-			background-color:#ffffff !important;
-		}
-	</style>
 </head>
 <body>
 	<div class="container" id="app">
 		<h2>COVID-19</h2>
-		<button v-on:click="menu(1)" class="button">Data</button>
+		<button v-on:click="menu(1)" class="button"><i class="icon-grid icons tred"></i> Data</button>
 		<button v-on:click="menu(2)" class="button">Layanan</button>
 
 
 	
 		<template v-if="showdata">
 			<div class="isi">
-				<div class="center" style="margin-top: 30px"><b>Jumlah Kasus:</b></div>
+				<div class="center"><b>Jumlah Kasus:</b></div>
 				<div class="flx">
 					<div class="col center">
-						<div style="font-size: 30px;padding: 15px;">{{ confirmed }}<span class="tgreen">.</span></div>
-						<span>Konfirmasi</span>
+						<div style="font-size: 30px;padding: 15px;">{{ confirmed }}</div>
+						<span class="tgreen">•</span> <span>Konfirmasi</span>
 					</div>
 					<div class="col center">
-						<div style="font-size: 30px;padding: 15px;">{{ activeCare }}<span class="tyellow">.</span></div>
-						<span>Dalam perawatan</span>
+						<div style="font-size: 30px;padding: 15px;">{{ activeCare }}</div>
+						<span class="tyellow">• </span><span>Dalam perawatan</span>
 					</div>
 				</div>
 				<div class="flx">
 					<div class="col center">
-						<div style="font-size: 30px;padding: 15px;">{{ recovered }}<span class="tblue">.</span></div>
-						<span>Sembuh</span>
+						<div style="font-size: 30px;padding: 15px;">{{ recovered }}</div>
+						<span class="tblue">•</span> <span>Sembuh</span>
 					</div>
 					<div class="col center">
-						<div style="font-size: 30px;padding: 15px;">{{ deaths }}<span class="tred">.</span></div>
-						<span>Meninggal</span>
+						<div style="font-size: 30px;padding: 15px;">{{ deaths }}</div>
+						<span class="tred">•</span> <span>Meninggal</span>
 					</div>
 				</div>
 				<div style="margin-top: 100px;text-align: left;text-indent: 20px;font-weight: 300;">
@@ -88,7 +54,7 @@
 
 		<template v-if="showlayanan">
 			<div class="isi" id="layanan">
-				<div class="center"><h4>Layanan COVID-19:</h4></div>
+				<div class="center"><b>Layanan COVID19:</b></div>
 				<ul>
 					<li>
 						COVID19.GO.ID <br>
