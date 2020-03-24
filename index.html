@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="assets/css/fazaio.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.4/vue.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.3/axios.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+	<script src="https://superal.github.io/canvas2image/canvas2image.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
+	<title>Coronavirus disease (COVID-19)</title>
+	<style>
+		.isi{
+			padding: 10px 0px 10px 0px;
+			margin-top: 15px;
+		}
+		.shared{
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+		}
+		.capture-button{
+			width: 50px;
+			height: 50px;
+			background-color: #fff;
+			border:1px solid #555;
+			color: #555;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  			transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  			cursor: pointer;
+  			z-index: 1;
+		}
+		.capture-button:focus,.capture-button:hover{
+			color: #dc3545;
+  			border-color: #555;
+  			outline: 0;
+		}
+		.container{
+			background-color:#ffffff !important;
+		}
+	</style>
+</head>
+<body>
+	<div class="container" id="app">
+		<h2>COVID-19</h2>
+		<button v-on:click="menu(1)" class="button">Data</button>
+		<button v-on:click="menu(2)" class="button">Layanan</button>
+
+
+	
+		<template v-if="showdata">
+			<div class="isi">
+				<div class="center" style="margin-top: 30px"><b>Jumlah Kasus:</b></div>
+				<div class="flx">
+					<div class="col center">
+						<div style="font-size: 30px;padding: 15px;">{{ confirmed }}<span class="tgreen">.</span></div>
+						<span>Konfirmasi</span>
+					</div>
+					<div class="col center">
+						<div style="font-size: 30px;padding: 15px;">{{ activeCare }}<span class="tyellow">.</span></div>
+						<span>Dalam perawatan</span>
+					</div>
+				</div>
+				<div class="flx">
+					<div class="col center">
+						<div style="font-size: 30px;padding: 15px;">{{ recovered }}<span class="tblue">.</span></div>
+						<span>Sembuh</span>
+					</div>
+					<div class="col center">
+						<div style="font-size: 30px;padding: 15px;">{{ deaths }}<span class="tred">.</span></div>
+						<span>Meninggal</span>
+					</div>
+				</div>
+				<div style="margin-top: 100px;text-align: left;text-indent: 20px;font-weight: 300;">
+					<span>Data diatas merupakan jumlah kasus penyebaran virus corona di Indonesia saat ini, data diambil langsung dari situs <a href="https://kawalcovid19.id/">https://kawalcovid19.id/</a>. Terakhir diperbarui: {{ lastupdate }}</span>
+				</div>
+			</div>
+		</template>
+
+
+
+		<template v-if="showlayanan">
+			<div class="isi" id="layanan">
+				<div class="center"><h4>Layanan COVID-19:</h4></div>
+				<ul>
+					<li>
+						COVID19.GO.ID <br>
+						<span>Whatsapp : 081133399000</span> <br>
+						<span>Situs : <a href="https://covid19.go.id">covid19.go.id</a></span>
+					</li>
+					<li>
+						RSUD Dr. Saiful Anwar<br>
+						<span>Fax: (0341-369384)</span> <br>
+						<span>Telepon: (0341-362101)</span> <br>
+						<span>JL. Jaksa Agung Suprapto No. 2 Malang</span>
+					</li>
+					<li>
+						Universitas Negeri Malang <br>
+						<span>Poliklinik UM : 081357925343</span> <br>
+						<span>Posko covid-19 UM : 082131702300</span>
+					</li>
+				</ul>
+			</div>
+		</template>
+
+
+		<div class="shared">
+			<div id="capture" class="capture-button"><i class="icon-share icons"></i></div>
+		</div>
+
+		<div class="footer">
+			#staysafe | "Soliteradalahsolidaritas" | #dirumahaja<br><span class="tred"><b>@FsocietyXitisjenar</b></span>|https://fazaio.web.app
+		</div>
+	</div>
+</body>
+</html>
+
+<script>	
+new Vue({
+  el: '#app',
+  data: {
+  	confirmed: '',
+  	recovered: '',
+  	deaths: '',
+  	activeCare: '',
+  	lastupdate: '',
+  	showdata: true,
+  	showlayanan: false
+  },
+  methods:{
+  	menu: function(menu){
+  		if (menu == 1) {
+  			console.log('menu data')
+  			this.showdata = true;
+  			this.showlayanan = false;
+  		}else if(menu == 2){
+  			 console.log('menu layanan')
+  			this.showdata = false;
+  			this.showlayanan = true;
+  		}
+  	}
+  },
+  mounted () {
+	var vm = this;
+  	axios.get('https://kawalcovid19.harippe.id/api/summary').then(function(response) {
+				vm.list 		= response.data;
+				vm.confirmed 	= response.data.confirmed.value;
+				vm.recovered 	= response.data.recovered.value;
+				vm.deaths 		= response.data.deaths.value;
+				vm.activeCare 	= response.data.activeCare.value;
+				vm.lastupdate	= response.data.metadata.lastUpdatedAt;
+				console.log(vm.lastupdate)
+			}, function(error) {
+				console.log(error.statusText);
+			});
+  }
+})
+
+
+document.querySelector('#capture').addEventListener('click', function() {
+        html2canvas(document.querySelector('body'), {
+            onrendered: function(canvas) {
+                // document.body.appendChild(canvas);
+              return Canvas2Image.saveAsPNG(canvas);
+            }
+        });
+    });
+</script>
