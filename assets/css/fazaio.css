@@ -46,7 +46,7 @@ button,
 input[type="submit"],
 input[type="reset"],
 input[type="button"] {
-	margin: 1px;
+	margin: 2px 0px;
   display: inline-block;
   height: 38px;
   padding: 0 30px;

@@ -15,8 +15,9 @@
 </head>
 <body>
 	<div class="container" id="app">
-		<h2>COVID-19</h2>
-		<button v-on:click="menu(1)" class="button"><i class="icon-grid icons tred"></i> Data</button>
+		<h2><i class="icon-chart icons tred"></i> COVID-19</h2>
+		<button v-on:click="menu(1)" class="button">Lokal</button>
+		<button v-on:click="menu(3)" class="button">Global</button>
 		<button v-on:click="menu(2)" class="button">Layanan</button>
 
 
@@ -44,21 +45,29 @@
 						<span class="tred">•</span> <span>Meninggal</span>
 					</div>
 				</div>
-				<div style="margin-top: 100px;text-align: left;text-indent: 20px;font-weight: 300;">
+				<div class="center"><button id="capture" class="button"><i class="icon-camera icons"></i> Simpan</button></div>
+				<div style="margin-top: 100px;text-align: left;text-indent: 20px;">
 					<span>Data diatas merupakan jumlah kasus penyebaran virus corona di Indonesia saat ini, data diambil langsung dari situs <a href="https://kawalcovid19.id/">https://kawalcovid19.id/</a>. Terakhir diperbarui: {{ lastupdate }}</span>
 				</div>
 			</div>
 		</template>
 
 
+		<template v-if="showGlobal">
+			<div class="isi">
+				<div class="center"><b>International:</b></div>
+				<span>cooming soon! :)</span>
+			</div>
+		</template>
+
 
 		<template v-if="showlayanan">
-			<div class="isi" id="layanan">
+			<div class="isi">
 				<div class="center"><b>Layanan COVID19:</b></div>
 				<ul>
 					<li>
 						COVID19.GO.ID <br>
-						<span>Whatsapp : 081133399000</span> <br>
+						<span><i class="icon-phone icons"></i> 081133399000</span> <br>
 						<span>Situs : <a href="https://covid19.go.id">covid19.go.id</a></span>
 					</li>
 					<li>
@@ -77,13 +86,15 @@
 		</template>
 
 
-		<div class="shared">
+<!-- 		<div class="shared">
 			<div id="capture" class="capture-button"><i class="icon-share icons"></i></div>
-		</div>
+		</div> -->
+
 
 		<div class="footer">
 			#staysafe | "Soliteradalahsolidaritas" | #dirumahaja<br><span class="tred"><b>@FsocietyXitisjenar</b></span>|https://fazaio.web.app
 		</div>
+
 	</div>
 </body>
 </html>
@@ -98,18 +109,24 @@ new Vue({
   	activeCare: '',
   	lastupdate: '',
   	showdata: true,
-  	showlayanan: false
+  	showlayanan: false,
+  	showGlobal: false,
+  	Global: ''
   },
   methods:{
   	menu: function(menu){
   		if (menu == 1) {
-  			console.log('menu data')
   			this.showdata = true;
   			this.showlayanan = false;
+  			this.showGlobal = false
   		}else if(menu == 2){
-  			 console.log('menu layanan')
   			this.showdata = false;
   			this.showlayanan = true;
+  			this.showGlobal = false
+  		}else if(menu == 3) {
+  			this.showdata = false
+  			this.showlayanan = false
+  			this.showGlobal = true
   		}
   	}
   },
@@ -126,6 +143,13 @@ new Vue({
 			}, function(error) {
 				console.log(error.statusText);
 			});
+
+  	axios.get('https://pomber.github.io/covid19/timeseries.json').then(function(response) {
+				console.log(response.data)
+				vm.Global = response.data
+			}, function(error) {
+				console.log(error.statusText);
+			});
   }
 })
 
@@ -139,3 +163,4 @@ document.querySelector('#capture').addEventListener('click', function() {
         });
     });
 </script>
+<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
