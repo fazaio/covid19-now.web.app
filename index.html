@@ -45,7 +45,7 @@
 						<span class="tred">•</span> <span>Meninggal</span>
 					</div>
 				</div>
-				<div class="center"><button id="capture" class="button"><i class="icon-camera icons"></i> Simpan</button></div>
+				<div class="center" style="margin-top: 30px;"><button id="capture" class="button"><i class="icon-camera icons"></i> Simpan</button></div>
 				<div style="margin-top: 100px;text-align: left;text-indent: 20px;">
 					<span>Data diatas merupakan jumlah kasus penyebaran virus corona di Indonesia saat ini, data diambil langsung dari situs <a href="https://kawalcovid19.id/">https://kawalcovid19.id/</a>. Terakhir diperbarui: {{ lastupdate }}</span>
 				</div>
@@ -55,22 +55,29 @@
 
 		<template v-if="showGlobal">
 			<div class="isi">
-				<div class="center"><b>International:</b></div>
+				<div class="center"><b>Data Internasional:</b> <br><span>Virtualisasi data dari dampak penyebaran pandemik Coronavirus Disease (COVID-19) di berbagai negara, Data diambil dari: <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData</a> </span></div>
 <!-- 				<div class="search">
 					<input style="width: 98%" type="text" placeholder="Cari negara">
 				</div> -->
 
 				<!-- looping fetch data -->
 				<div id="global">
-					<div class="single-card" style="margin-top: 40px;color: gray !important" v-for="(value,country) in Global">
+					<div class="single-card" style="margin-top: 40px;color: gray !important" v-for="(value,country) in filtel">
 						<div class="flx">
 							<div class="col"><b> {{ country }} </b></div>
 							<div class="col" style="text-align: right;"><span><i>{{ value.slice(-1)[0].date }}</i></span></div>
 						</div>
 						<div class="total-flx">
-							<div class="tot"><span class="tblue">•</span>Confirmed <b>{{ value.slice(-1)[0].confirmed }}</b></div>
-							<div class="tot"><span class="tred">•</span>Death <b>{{ value.slice(-1)[0].deaths }}</b></div>
-							<div class="tot"><span class="tgreen">•</span>Recovered <b>{{ value.slice(-1)[0].recovered }}</b></div>
+							<div class="tot">Confirmed 
+								<span class="tblue">
+								{{ value.slice(-1)[0].confirmed }}</span>
+							</div>
+							<div class="tot">Death 
+								<span class="tred">{{ value.slice(-1)[0].deaths }}</span>
+							</div>
+							<div class="tot">Recovered 
+								<span class="tgreen">{{ value.slice(-1)[0].recovered }} -</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -130,7 +137,7 @@ new Vue({
   	showdata: true,
   	showlayanan: false,
   	showGlobal: false,
-  	Global: ''
+  	Global: null
   },
   methods:{
   	menu: function(menu){
@@ -148,6 +155,12 @@ new Vue({
   			this.showGlobal = true
   		}
   	}
+  },
+  computed:{
+  	filtel: function(){
+  		var data  = this.Global;
+  		return data
+	}
   },
   mounted () {
 	var vm = this;
