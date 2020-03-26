@@ -125,3 +125,15 @@ input[type="button"]:focus {
 	text-align: center;
 	font-size: 11px;	
 }
+
+
+/*--------------------- Card ---------------------*/
+
+.single-card{
+  padding: 1px 10px 10px 10px;
+  background-color: #fff;
+  margin-top: 15px;
+  /*border: 1px solid salmon;*/
+  border-radius: 5px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}

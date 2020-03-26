@@ -56,7 +56,26 @@
 		<template v-if="showGlobal">
 			<div class="isi">
 				<div class="center"><b>International:</b></div>
-				<span>cooming soon! :)</span>
+<!-- 				<div class="search">
+					<input style="width: 98%" type="text" placeholder="Cari negara">
+				</div> -->
+
+				<!-- looping fetch data -->
+				<div id="global">
+					<div class="single-card" style="margin-top: 40px;color: gray !important" v-for="(value,country) in Global">
+						<div class="flx">
+							<div class="col"><b> {{ country }} </b></div>
+							<div class="col" style="text-align: right;"><span><i>{{ value.slice(-1)[0].date }}</i></span></div>
+						</div>
+						<div class="total-flx">
+							<div class="tot"><span class="tblue">•</span>Confirmed <b>{{ value.slice(-1)[0].confirmed }}</b></div>
+							<div class="tot"><span class="tred">•</span>Death <b>{{ value.slice(-1)[0].deaths }}</b></div>
+							<div class="tot"><span class="tgreen">•</span>Recovered <b>{{ value.slice(-1)[0].recovered }}</b></div>
+						</div>
+					</div>
+				</div>
+
+
 			</div>
 		</template>
 
@@ -145,6 +164,7 @@ new Vue({
 			});
 
   	axios.get('https://pomber.github.io/covid19/timeseries.json').then(function(response) {
+				console.log(response.data.Afghanistan[0])
 				console.log(response.data)
 				vm.Global = response.data
 			}, function(error) {
@@ -163,4 +183,6 @@ document.querySelector('#capture').addEventListener('click', function() {
         });
     });
 </script>
+
+
 <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>

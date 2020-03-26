@@ -31,3 +31,20 @@
 		.container{
 			background-color:#ffffff !important;
 		}
+
+		.total-flx{
+			display: flex;
+			justify-content: space-between;
+		}
+		.tot{
+			width: auto;
+			font-size: 14px;
+			font-weight: 400;
+			margin: 2px;
+		}
+		.search{
+			padding: 5px;
+			margin: 10px 0px 50px 0px;
+			justify-content: center;
+			text-align: center;
+		}
