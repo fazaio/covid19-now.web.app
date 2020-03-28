@@ -18,7 +18,7 @@
 		<h2><i class="icon-chart icons tred"></i> COVID-19</h2>
 		<button v-on:click="menu(1)" class="button">Lokal</button>
 		<button v-on:click="menu(3)" class="button">Global</button>
-		<button v-on:click="menu(2)" class="button">Layanan</button>
+		<button v-on:click="menu(2)" class="button">Info</button>
 
 
 	
@@ -76,7 +76,7 @@
 								<span class="tred">{{ value.slice(-1)[0].deaths }}</span>
 							</div>
 							<div class="tot">Recovered 
-								<span class="tgreen">{{ value.slice(-1)[0].recovered }} -</span>
+								<span class="tgreen">{{ value.slice(-1)[0].recovered }}</span>
 							</div>
 						</div>
 					</div>
@@ -89,25 +89,24 @@
 
 		<template v-if="showlayanan">
 			<div class="isi">
-				<div class="center"><b>Layanan COVID19:</b></div>
+				<div class="center"><b>Info:</b></div>
+				<div style="margin-top: 50px"><b>Data Source:</b></div>
 				<ul>
-					<li>
-						COVID19.GO.ID <br>
-						<span><i class="icon-phone icons"></i> 081133399000</span> <br>
-						<span>Situs : <a href="https://covid19.go.id">covid19.go.id</a></span>
-					</li>
-					<li>
-						RSUD Dr. Saiful Anwar<br>
-						<span>Fax: (0341-369384)</span> <br>
-						<span>Telepon: (0341-362101)</span> <br>
-						<span>JL. Jaksa Agung Suprapto No. 2 Malang</span>
-					</li>
-					<li>
-						Universitas Negeri Malang <br>
-						<span>Poliklinik UM : 081357925343</span> <br>
-						<span>Posko covid-19 UM : 082131702300</span>
-					</li>
+					<li><span class="tred">@pomber</span> | https://github.com/pomber/covid19</li>
+					<li><span class="tred">CSSEGISandData/COVID-19 </span> | 2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns Hopkins CSSE: https://github.com/CSSEGISandData/COVID-19</li>
 				</ul>
+				<b>Info COVID19:</b>
+				<ul>
+					<li><i class="icon-phone icons"></i> +62811-3339-9000</li>
+					<li>https://covid19.go.id</li>
+				</ul>
+				<b>Powered By:</b>
+				<ul>
+					<li><span class="tred"><b>@fazaio</b></span> - <i class="icon-location-pin"></i>Malang</li>
+					<li>+62-899-3774-262</li>
+					<li>Faza6028@gmail.com</li>
+					<li>https://fazaio.web.app</li>
+				</ul>				
 			</div>
 		</template>
 
