@@ -55,8 +55,16 @@
 						<span v-else>Loading . . . . .</span>
 					</div>
 				</div>
+				<div style="margin-top: 100px">
+					<b>Bar Chart:</b><br>
+					<span> • grafik batang</span>
+					<div style="margin: 20px 0px">
+						<bar-chart v-if="loaded" :data="localChart"></bar-chart>
+						<span v-else>Loading . . . . .</span>
+					</div>
+				</div>
 				<div style="margin-top: 100px;text-align: left;text-indent: 20px;">
-					<span>Data diatas merupakan jumlah kasus penyebaran virus corona di Indonesia saat ini, data diambil langsung dari situs <a href="https://kawalcovid19.id/">https://kawalcovid19.id/</a>. Terakhir diperbarui: {{ lastupdate }}</span>
+					<span>Data diatas merupakan jumlah kasus penyebaran pandemik Coronavirus Disease (COVID-19) di Indonesia selama satu minggu terakhir dari sekarang. Sumber data tertera pada laman Info.</span>
 				</div>
 				<div class="center" style="margin-top: 30px;"><button id="capture" class="button"><i class="icon-camera icons"></i> Simpan</button></div>
 			</div>
@@ -99,6 +107,7 @@
 				<b>Data Source:</b>
 				<ul>
 					<li><span class="tred">@pomber</span> | https://github.com/pomber/covid19</li>
+					<li><span class="tred">kawalcovid19.id</span> | https://kawalcovid19.id/</li>
 					<li><span class="tred">CSSEGISandData/COVID-19 </span> | 2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns Hopkins CSSE: https://github.com/CSSEGISandData/COVID-19</li>
 				</ul>
 				<b>Info COVID19:</b>
@@ -128,6 +137,14 @@
 <script>
 Vue.component('line-chart', {
   extends: VueChartJs.Line,
+  props: ['data'],
+  mounted () {
+    this.renderChart(this.data,{responsive: true, maintainAspectRatio: false})
+  }
+})
+
+Vue.component('bar-chart', {
+  extends: VueChartJs.Bar,
   props: ['data'],
   mounted () {
     this.renderChart(this.data,{responsive: true, maintainAspectRatio: false})
@@ -174,7 +191,7 @@ new Vue({
             var conf = []
             var deat = []
             var reco = []
-            var data = response.data.Indonesia.slice(-15)
+            var data = response.data.Indonesia.slice(-7)
             for (var i = 0; i < data.length; i++) {
               date.push(data[i].date)
               conf.push(data[i].confirmed)
