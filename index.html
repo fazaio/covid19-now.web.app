@@ -6,11 +6,13 @@
   	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" href="assets/css/fazaio.css">
 	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.4/vue.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.3/axios.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 	<script src="https://superal.github.io/canvas2image/canvas2image.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+	<script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
 	<title>Coronavirus disease (COVID-19)</title>
 </head>
 <body>
@@ -45,22 +47,29 @@
 						<span class="tred">•</span> <span>Meninggal</span>
 					</div>
 				</div>
-				<div class="center" style="margin-top: 30px;"><button id="capture" class="button"><i class="icon-camera icons"></i> Simpan</button></div>
+				<div style="margin-top: 100px">
+					<b>Line Chart:</b><br>
+					<span> • grafik garis</span>
+					<div style="margin: 20px 0px">
+						<line-chart v-if="loaded" :data="localChart"></line-chart>
+						<span v-else>Loading . . . . .</span>
+					</div>
+				</div>
 				<div style="margin-top: 100px;text-align: left;text-indent: 20px;">
 					<span>Data diatas merupakan jumlah kasus penyebaran virus corona di Indonesia saat ini, data diambil langsung dari situs <a href="https://kawalcovid19.id/">https://kawalcovid19.id/</a>. Terakhir diperbarui: {{ lastupdate }}</span>
 				</div>
+				<div class="center" style="margin-top: 30px;"><button id="capture" class="button"><i class="icon-camera icons"></i> Simpan</button></div>
 			</div>
 		</template>
 
 
 		<template v-if="showGlobal">
 			<div class="isi">
-				<div class="center"><b>Data Internasional:</b> <br><span>Virtualisasi data dari dampak penyebaran pandemik Coronavirus Disease (COVID-19) di berbagai negara, Data diambil dari: <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData</a> </span></div>
+				<b>Data Internasional:</b> <br><span>Virtualisasi data dari dampak penyebaran pandemik Coronavirus Disease (COVID-19) di berbagai negara, Data diambil dari: <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData</a> </span>
 <!-- 				<div class="search">
 					<input style="width: 98%" type="text" placeholder="Cari negara">
 				</div> -->
 
-				<!-- looping fetch data -->
 				<div id="global">
 					<div class="single-card" style="margin-top: 40px;color: gray !important" v-for="(value,country) in filtel">
 						<div class="flx">
@@ -81,16 +90,13 @@
 						</div>
 					</div>
 				</div>
-
-
 			</div>
 		</template>
 
 
 		<template v-if="showlayanan">
 			<div class="isi">
-				<div class="center"><b>Info:</b></div>
-				<div style="margin-top: 50px"><b>Data Source:</b></div>
+				<b>Data Source:</b>
 				<ul>
 					<li><span class="tred">@pomber</span> | https://github.com/pomber/covid19</li>
 					<li><span class="tred">CSSEGISandData/COVID-19 </span> | 2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns Hopkins CSSE: https://github.com/CSSEGISandData/COVID-19</li>
@@ -111,11 +117,6 @@
 		</template>
 
 
-<!-- 		<div class="shared">
-			<div id="capture" class="capture-button"><i class="icon-share icons"></i></div>
-		</div> -->
-
-
 		<div class="footer">
 			#staysafe | "Soliteradalahsolidaritas" | #dirumahaja<br><span class="tred"><b>@FsocietyXitisjenar</b></span>|https://fazaio.web.app
 		</div>
@@ -124,7 +125,16 @@
 </body>
 </html>
 
-<script>	
+<script>
+Vue.component('line-chart', {
+  extends: VueChartJs.Line,
+  props: ['data'],
+  mounted () {
+    this.renderChart(this.data,{responsive: true, maintainAspectRatio: false})
+  }
+})
+
+
 new Vue({
   el: '#app',
   data: {
@@ -136,7 +146,9 @@ new Vue({
   	showdata: true,
   	showlayanan: false,
   	showGlobal: false,
-  	Global: null
+  	Global: null,
+  	loaded: false,
+  	localChart: ''
   },
   methods:{
   	menu: function(menu){
@@ -153,7 +165,55 @@ new Vue({
   			this.showlayanan = false
   			this.showGlobal = true
   		}
+  	},
+  	fetChart(){
+  		  var vm = this;
+          axios.get('https://pomber.github.io/covid19/timeseries.json').then(function(response) {
+            vm.Global = response.data
+            var date = []
+            var conf = []
+            var deat = []
+            var reco = []
+            var data = response.data.Indonesia.slice(-15)
+            for (var i = 0; i < data.length; i++) {
+              date.push(data[i].date)
+              conf.push(data[i].confirmed)
+              deat.push(data[i].deaths)
+              reco.push(data[i].recovered)
+            }
+            vm.localChart = {
+            labels: date,
+            datasets: [
+              {
+                label: 'Meninggal',
+                borderColor: 'rgb(220,53,69,0.7)',
+                backgroundColor: 'rgb(220,53,69,0.2)',
+                data: deat
+              },
+              {
+                label: 'Konfirmasi',
+                borderColor: 'rgb(0,184,148,0.7)',
+                backgroundColor: 'rgb(0,184,148, 0.2)',
+                data: conf
+              },
+              {
+                label: 'Sembuh',
+                borderColor: 'rgb(9, 132, 227, 0.7)',
+                backgroundColor: 'rgb(9, 132, 227, 0.2)',
+                data: reco
+              }
+            ]
+          }
+
+            vm.loaded = true
+
+          }, function(error) {
+            console.log(error.statusText);
+          })
   	}
+  },
+  created(){
+  	this.fetChart()
   },
   computed:{
   	filtel: function(){
@@ -162,26 +222,17 @@ new Vue({
 	}
   },
   mounted () {
-	var vm = this;
-  	axios.get('https://kawalcovid19.harippe.id/api/summary').then(function(response) {
-				vm.list 		= response.data;
-				vm.confirmed 	= response.data.confirmed.value;
-				vm.recovered 	= response.data.recovered.value;
-				vm.deaths 		= response.data.deaths.value;
-				vm.activeCare 	= response.data.activeCare.value;
-				vm.lastupdate	= response.data.metadata.lastUpdatedAt;
-				console.log(vm.lastupdate)
-			}, function(error) {
-				console.log(error.statusText);
-			});
-
-  	axios.get('https://pomber.github.io/covid19/timeseries.json').then(function(response) {
-				console.log(response.data.Afghanistan[0])
-				console.log(response.data)
-				vm.Global = response.data
-			}, function(error) {
-				console.log(error.statusText);
-			});
+		var vm = this;
+	  	axios.get('https://kawalcovid19.harippe.id/api/summary').then(function(response) {
+					vm.list 		= response.data;
+					vm.confirmed 	= response.data.confirmed.value;
+					vm.recovered 	= response.data.recovered.value;
+					vm.deaths 		= response.data.deaths.value;
+					vm.activeCare 	= response.data.activeCare.value;
+					vm.lastupdate	= response.data.metadata.lastUpdatedAt;
+				}, function(error) {
+					console.log(error.statusText);
+				});
   }
 })
 
