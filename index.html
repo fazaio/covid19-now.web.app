@@ -4,6 +4,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
   	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+  	<meta name="title" content="Data dunia corona virus">
+  	<meta name="description" content="Virtualisasi data dari dampak penyebaran pandemik Coronavirus Disease (COVID-19) di berbagai negara.">
+	<meta name="keywords" content="corona,covid19,korona,viruskorona,viruscorona,korona19,datakorona,datanegaracorona">
+	<meta name="google-site-verification" content="lQSJjxp-p9_Y9H_xirPvXsbVqMwY94LlHhF76hPMUu4" />
 	<link rel="stylesheet" href="assets/css/fazaio.css">
 	<link rel="stylesheet" href="assets/css/style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
@@ -64,7 +68,7 @@
 					</div>
 				</div>
 				<div style="margin-top: 100px;text-align: left;text-indent: 20px;">
-					<span>Data diatas merupakan jumlah kasus penyebaran pandemik Coronavirus Disease (COVID-19) di Indonesia selama satu minggu terakhir dari sekarang. Sumber data tertera pada laman Info.</span>
+					<span>Data diatas merupakan jumlah dampak kasus penyebaran pandemik Coronavirus Disease (COVID-19) di Indonesia selama 14 hari terakhir. Sumber data tertera pada laman Info.</span>
 				</div>
 				<div class="center" style="margin-top: 30px;"><button id="capture" class="button"><i class="icon-camera icons"></i> Simpan</button></div>
 			</div>
@@ -74,15 +78,15 @@
 		<template v-if="showGlobal">
 			<div class="isi">
 				<b>Data Internasional:</b> <br><span>Virtualisasi data dari dampak penyebaran pandemik Coronavirus Disease (COVID-19) di berbagai negara, Data diambil dari: <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData</a> </span>
-<!-- 				<div class="search">
-					<input style="width: 98%" type="text" placeholder="Cari negara">
-				</div> -->
-
+				<div class="search">
+					<input v-model="fillCountry" style="width: 100%" type="text" placeholder="Cari negara">
+				</div>
+				<span><i><b>{{ fillCountry }}</b></i></span>
 				<div id="global">
 					<div class="single-card" style="margin-top: 40px;color: gray !important" v-for="(value,country) in filtel">
 						<div class="flx">
 							<div class="col"><b> {{ country }} </b></div>
-							<div class="col" style="text-align: right;"><span><i>{{ value.slice(-1)[0].date }}</i></span></div>
+							<div class="col" style="text-align: right;font-size: 10px"><i>{{ value.slice(-1)[0].date }}</i></div>
 						</div>
 						<div class="total-flx">
 							<div class="tot">Confirmed 
@@ -129,7 +133,6 @@
 		<div class="footer">
 			#staysafe | "Soliteradalahsolidaritas" | #dirumahaja<br><span class="tred"><b>@FsocietyXitisjenar</b></span>|https://fazaio.web.app
 		</div>
-
 	</div>
 </body>
 </html>
@@ -165,7 +168,8 @@ new Vue({
   	showGlobal: false,
   	Global: null,
   	loaded: false,
-  	localChart: ''
+  	localChart: '',
+  	fillCountry: ''
   },
   methods:{
   	menu: function(menu){
@@ -191,7 +195,7 @@ new Vue({
             var conf = []
             var deat = []
             var reco = []
-            var data = response.data.Indonesia.slice(-7)
+            var data = response.data.Indonesia.slice(-14)
             for (var i = 0; i < data.length; i++) {
               date.push(data[i].date)
               conf.push(data[i].confirmed)
@@ -227,14 +231,27 @@ new Vue({
           }, function(error) {
             console.log(error.statusText);
           })
+  	},
+  	handleScroll:function(event){
+  		console.log(event)
   	}
   },
   created(){
   	this.fetChart()
+  	
   },
   computed:{
   	filtel: function(){
   		var data  = this.Global;
+  		const allowed = this.fillCountry;
+  		if ('' !== allowed) {
+  		  return Object.keys(data)
+			  .filter(key => key.toLowerCase().includes(allowed.toLowerCase()))
+			  .reduce((obj, key) => {
+			    obj[key] = data[key];
+			    return obj;
+			  }, {});
+  		}
   		return data
 	}
   },
@@ -264,5 +281,3 @@ document.querySelector('#capture').addEventListener('click', function() {
     });
 </script>
 
-
-<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
